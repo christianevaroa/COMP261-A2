@@ -3,7 +3,6 @@ package Mapper;
 public class SearchNode implements Comparable {
 	private Node node;
 	private Node from;
-	private boolean visited;
 	private double costToHere;
 	private double totalCostToGoal;
 	
@@ -14,13 +13,6 @@ public class SearchNode implements Comparable {
 		this.totalCostToGoal = costToHere + estimate;
 	}
 	
-	public boolean visited(){
-		return this.visited;
-	}
-	
-	public void visit(){
-		this.visited = true;
-	}
 	
 	public Node node(){
 		return this.node;
