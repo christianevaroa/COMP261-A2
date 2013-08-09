@@ -184,6 +184,23 @@ public class AucklandMapper{
 					destinationNode = findNode(e.getPoint());
 					selectedSegments = roadGraph.findPath(selectedNode, destinationNode);
 					textOutput.setText(destinationNode.toString());
+					HashMap<String, Double> roadNames = new HashMap<String, Double>();
+					for(Segment s : selectedSegments){
+						String road = s.getRoad().getName();
+						double length = s.getLength();
+						if(!roadNames.containsKey(road)){
+							roadNames.put(road, length);
+						}
+						else{
+							roadNames.put(road, roadNames.get(road)+length);
+						}
+					}
+					double totalLength = 0;
+					for(String s : roadNames.keySet()){
+						totalLength += roadNames.get(s);
+						textOutput.append("\n"+s+": "+roadNames.get(s)+" km");
+					}
+					textOutput.append("\nTotal distance: "+totalLength+" km");
 				}
 				drawing.repaint();}});
 

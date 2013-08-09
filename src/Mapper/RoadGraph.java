@@ -288,6 +288,7 @@ public class RoadGraph{
 				}
 			}
 		}
+		Collections.reverse(path);
 		return path;
 	}	
 
