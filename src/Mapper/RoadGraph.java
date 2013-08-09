@@ -248,17 +248,37 @@ public class RoadGraph{
 		AucklandMapper.main(arguments);
 	}
 
-	public List<Segment> findPath(Node origin, Node destinationNode) {
+	public List<Segment> findPath(Node origin, Node goal) {
+		for(Node n : nodes.values()){
+			n.visit(false);
+		}
+		List<Segment> path = new ArrayList<Segment>();
 		PriorityQueue<SearchNode> fringe = new PriorityQueue<SearchNode>();
-		Location destLoc = destinationNode.getLoc();
-		SearchNode start = new SearchNode(origin, null, 0, origin.distanceTo(destLoc));
+		Location goalLoc = goal.getLoc();
+		SearchNode start = new SearchNode(origin, null, 0, origin.distanceTo(goalLoc));
 		fringe.offer(start);
 		while(!fringe.isEmpty()){
 			SearchNode currentNode = fringe.poll();
-			if(!currentNode.visited()){
-				currentNode.visit();
+			Node node = currentNode.node();
+			if(!node.visited()){
+				node.visit(true);
+				node.setFrom(currentNode.from());
+				node.setCost(currentNode.costToHere());
+				if(node == goal){
+					break;
+				}
+				for(Segment s : node.getOutNeighbours()){
+					Node neigh = s.getEndNode();
+					if(!neigh.visited()){
+						double costToNeigh = currentNode.costToHere() + s.getLength();
+						double estTotal = costToNeigh + neigh.distanceTo(goalLoc);
+						SearchNode newSearchNode = new SearchNode(neigh, node, costToNeigh, estTotal);
+						fringe.offer(newSearchNode);
+					}
+				}
 			}
 		}
+		
 		return null;
 	}	
 

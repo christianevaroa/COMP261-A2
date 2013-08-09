@@ -21,6 +21,22 @@ public class SearchNode implements Comparable {
 	public void visit(){
 		this.visited = true;
 	}
+	
+	public Node node(){
+		return this.node;
+	}
+	
+	public Node from(){
+		return this.from;
+	}
+	
+	public double costToHere(){
+		return costToHere;
+	}
+	
+	public double totalCostToGoal(){
+		return totalCostToGoal;
+	}
 
 	@Override
 	public int compareTo(Object o) {

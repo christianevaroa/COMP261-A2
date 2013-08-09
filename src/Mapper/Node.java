@@ -21,6 +21,9 @@ public class Node{
     private Location loc;  // coordinates of the intersection
     private List<Segment> outNeighbours = new ArrayList<Segment>(2);
     private List<Segment> inNeighbours = new ArrayList<Segment>(2);
+    private boolean visited;
+    private Node pathFrom;
+    private double cost;
 
 
     /** Construct a new Node object */
@@ -87,6 +90,30 @@ public class Node{
 	    b.append(name).append(", ");
 	}
 	return b.toString();
+    }
+    
+    public boolean visited(){
+    	return this.visited;
+    }
+    
+    public void visit(boolean b){
+    	this.visited = b;
+    }
+    
+    public void setFrom(Node n){
+    	this.pathFrom = n;
+    }
+    
+    public Node from(){
+    	return this.pathFrom;
+    }
+    
+    public void setCost(double cost){
+    	this.cost = cost;
+    }
+    
+    public double cost(){
+    	return this.cost;
     }
 
 
