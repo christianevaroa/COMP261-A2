@@ -154,7 +154,8 @@ public class AucklandMapper{
 			public void actionPerformed(ActionEvent ev){
 				selectedNode = null;
 				destinationNode = null;
-				selectedSegments.clear();}});
+				selectedSegments.clear();
+				drawing.repaint();}});
 
 
 

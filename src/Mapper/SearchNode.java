@@ -42,10 +42,10 @@ public class SearchNode implements Comparable {
 	public int compareTo(Object o) {
 		SearchNode other = (SearchNode)o;
 		if(this.totalCostToGoal < other.totalCostToGoal){
-			return 1;
+			return -1;
 		}
 		else if(this.totalCostToGoal > other.totalCostToGoal){
-			return -1;
+			return 1;
 		}
 		return 0;
 	}

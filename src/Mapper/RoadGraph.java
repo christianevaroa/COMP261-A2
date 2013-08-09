@@ -278,8 +278,17 @@ public class RoadGraph{
 				}
 			}
 		}
-		
-		return null;
+		Node backTrack = goal;
+		while(backTrack != origin){
+			for(Segment s : backTrack.getInNeighbours()){
+				if(s.getStartNode() == backTrack.from()){
+					path.add(s);
+					backTrack = backTrack.from();
+					break;
+				}
+			}
+		}
+		return path;
 	}	
 
 
