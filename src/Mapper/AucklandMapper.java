@@ -31,6 +31,7 @@ public class AucklandMapper{
 	private Node selectedNode;  // the currently selected node
 	private Node destinationNode;	// the destination (find a path from selectedNode to destinationNode)
 	private List<Segment> selectedSegments;  // the currently selected road or path
+	private Set<Node> articulationPoints;
 
 	private boolean loaded = false;
 
@@ -156,6 +157,12 @@ public class AucklandMapper{
 				destinationNode = null;
 				selectedSegments.clear();
 				drawing.repaint();}});
+		
+		button = new JButton("A. Pts");
+		panel.add(button);
+		button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev){
+				articulationPoints = roadGraph.iterDFS(selectedNode);}});
 
 
 

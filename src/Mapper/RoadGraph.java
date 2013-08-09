@@ -248,6 +248,12 @@ public class RoadGraph{
 		AucklandMapper.main(arguments);
 	}
 
+	/**
+	 * Use A* algorithm to find the shortest path between two nodes.
+	 * @param origin	The starting point.
+	 * @param goal		The finishing point.
+	 * @return List of Sections that makes up the shortest path from origin to goal.
+	 */
 	public List<Segment> findPath(Node origin, Node goal) {
 		for(Node n : nodes.values()){
 			n.visit(false);
@@ -291,6 +297,11 @@ public class RoadGraph{
 		Collections.reverse(path);
 		return path;
 	}	
-
+	
+	public Set<Node> iterDFS(Node start){
+		HashSet<Node> articulationPoints = new HashSet<Node>();
+		
+		return articulationPoints;
+	}
 
 }
