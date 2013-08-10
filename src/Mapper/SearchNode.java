@@ -13,7 +13,6 @@ public class SearchNode implements Comparable {
 		this.totalCostToGoal = costToHere + estimate;
 	}
 	
-	
 	public Node node(){
 		return this.node;
 	}

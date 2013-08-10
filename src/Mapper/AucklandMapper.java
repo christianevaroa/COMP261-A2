@@ -163,8 +163,7 @@ public class AucklandMapper{
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){
 				articulationPoints = roadGraph.iterDFS(selectedNode);}});
-
-
+		
 
 		nameEntry = new JTextField(20);
 		panel.add(nameEntry);
