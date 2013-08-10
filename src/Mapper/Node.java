@@ -24,6 +24,7 @@ public class Node{
     private boolean visited;
     private Node pathFrom;
     private double cost;
+    private double depth;
 
 
     /** Construct a new Node object */
@@ -77,6 +78,11 @@ public class Node{
 	g.fillRect(p.x, p.y, 2, 2);
     }
     
+    public void drawAP(Graphics g, Location origin, double scale){
+    	Point p = loc.getPoint(origin, scale);
+    	g.fillOval(p.x-2, p.y-2, 4, 4);
+        }
+    
     public String toString(){
 	StringBuilder b = new StringBuilder(String.format("Intersection %d: at %s; Roads:  ", id, loc));
 	Set<String> roadNames = new HashSet<String>();
@@ -115,7 +121,25 @@ public class Node{
     public double cost(){
     	return this.cost;
     }
+    
+    public double depth(){
+    	return this.depth;
+    }
+    
+    public void setDepth(double depth){
+    	this.depth = depth;
+    }
 
+    public List<Node> getNeighNodes(){
+    	List<Node> neighbours = new ArrayList<Node>(2);
+    	for(Segment s: outNeighbours){
+    		neighbours.add(s.getEndNode());
+    	}
+    	for(Segment s: inNeighbours){
+    		neighbours.add(s.getStartNode());
+    	}
+    	return neighbours;
+    }
 
 
 }

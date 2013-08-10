@@ -155,15 +155,27 @@ public class AucklandMapper{
 			public void actionPerformed(ActionEvent ev){
 				selectedNode = null;
 				destinationNode = null;
-				selectedSegments.clear();
+				selectedSegments = null;
+				articulationPoints = null;
 				drawing.repaint();}});
-		
+
 		button = new JButton("A. Pts");
 		panel.add(button);
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){
-				articulationPoints = roadGraph.iterDFS(selectedNode);}});
-		
+				if(selectedNode != null){
+					for(Node n: selectedNode.getNeighNodes()){
+						articulationPoints = new HashSet<Node>();
+						articulationPoints.addAll(roadGraph.iterDFS(n, 0, new DFSNode(selectedNode, 0, null)));
+						drawing.repaint();
+					}
+					//for(Node n :)
+				}
+				else{
+					textOutput.setText("You must select a node to find articulation points");
+				}
+				}});
+
 
 		nameEntry = new JTextField(20);
 		panel.add(nameEntry);
@@ -309,6 +321,12 @@ public class AucklandMapper{
 			g.setColor(Color.red);
 			for (Segment seg : selectedSegments){
 				seg.draw(g, origin, scale);
+			}
+		}
+		if(articulationPoints != null){
+			g.setColor(Color.green);
+			for(Node n : articulationPoints){
+				n.drawAP(g, origin, scale);
 			}
 		}
 	}

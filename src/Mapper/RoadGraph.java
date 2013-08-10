@@ -298,9 +298,54 @@ public class RoadGraph{
 		return path;
 	}	
 	
-	public Set<Node> iterDFS(Node start){
+	public Set<Node> iterDFS(Node firstNode, double d, DFSNode root){
+		// initialise required collections
 		HashSet<Node> articulationPoints = new HashSet<Node>();
-		
+		Stack<DFSNode> stack = new Stack<DFSNode>();
+		// init all nodes (depth = +inf, visited = false)
+		for(Node n : nodes.values()){
+			n.visit(false);
+			n.setDepth(Double.POSITIVE_INFINITY);
+		}
+		DFSNode first = new DFSNode(firstNode, 1, root);
+		stack.push(first);
+		while(!stack.isEmpty()){
+			DFSNode elem = stack.peek();
+			Node node = elem.node();
+			node.visit(true);
+			if(elem.children() == null){
+				node.setDepth(elem.depth());
+				elem.setReach(elem.depth());
+				ArrayDeque<Node> children = new ArrayDeque<Node>(2);
+				elem.setChildren(children);
+				for(Node neighbour : node.getNeighNodes()){ // for each neighbour of node
+					if(neighbour!=elem.parent().node()){	// if neighbour isnt parent
+						children.offer(neighbour);			// add neighbour to children
+					}
+				}
+			}
+			else if(!elem.children().isEmpty()){
+				Node child = elem.children().poll();
+				if(child.depth() < Double.POSITIVE_INFINITY)
+					elem.setReach(Math.min(elem.reach(), child.depth()));
+				else
+					stack.push(new DFSNode(child, node.depth()+1, elem));
+			}
+			else{
+				if(node != firstNode){
+					if(elem.reach() >= elem.parent().depth()){
+						articulationPoints.add(elem.parent().node());
+					}
+					elem.parent().setReach(Math.min(elem.parent().reach(), elem.reach()));
+				}
+				stack.pop();	
+			}
+			//for(Node n : nodes.values()){
+			//	if(!node.visited()){
+			//		articulationPoints.addAll(iterDFS(n, 0, new DFSNode(n, 0, null)));
+			//	}
+			//}
+		}
 		return articulationPoints;
 	}
 
