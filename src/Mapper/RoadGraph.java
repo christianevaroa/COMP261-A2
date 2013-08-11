@@ -263,6 +263,7 @@ public class RoadGraph{
 		Location goalLoc = goal.getLoc();
 		SearchNode start = new SearchNode(origin, null, 0, origin.distanceTo(goalLoc));
 		fringe.offer(start);
+		int i = 0;
 		while(!fringe.isEmpty()){
 			SearchNode currentNode = fringe.poll();
 			Node node = currentNode.node();
@@ -278,29 +279,29 @@ public class RoadGraph{
 						Node neigh = s.getEndNode();
 						if(!neigh.visited()){
 							double costToNeigh = currentNode.costToHere() + s.getLength();
-							double estTotal = costToNeigh + neigh.distanceTo(goalLoc);
 							if(!distance){
 								switch(s.getRoad().getSpeed()){
 								case(0):
-									estTotal = estTotal-(estTotal*0.05);
-									break;
+									costToNeigh = costToNeigh-(costToNeigh*0.05);
+								break;
 								case(1):
-									estTotal = estTotal-(estTotal*0.20);
-									break;
+									costToNeigh = costToNeigh-(costToNeigh*0.20);
+								break;
 								case(2):
-									estTotal = estTotal-(estTotal*0.40);
-									break;
+									costToNeigh = costToNeigh-(costToNeigh*0.40);
+								break;
 								case(3):
-									estTotal = estTotal-(estTotal*0.60);
-									break;
+									costToNeigh = costToNeigh-(costToNeigh*0.60);
+								break;
 								case(4):
-									estTotal = estTotal-(estTotal*0.80);
-									break;
+									costToNeigh = costToNeigh-(costToNeigh*0.80);
+								break;
 								case(5):
-									estTotal = estTotal-(estTotal*0.99);
-									break;
-								}
+									costToNeigh = costToNeigh-(costToNeigh*0.99);
+								break;
+								}	
 							}
+							double estTotal = costToNeigh + neigh.distanceTo(goalLoc);
 							SearchNode newSearchNode = new SearchNode(neigh, node, costToNeigh, estTotal);
 							fringe.offer(newSearchNode);
 						}
@@ -310,7 +311,11 @@ public class RoadGraph{
 		}
 		Node backTrack = goal;
 		while(backTrack != origin){
-			for(Segment s : backTrack.getInNeighbours()){
+			for(int j = 0; j <= backTrack.getInNeighbours().size(); j++){
+				if(j == backTrack.getInNeighbours().size()){
+					return null; // This means there is no path to the goal node
+				}
+				Segment s = backTrack.getInNeighbours().get(j);
 				if(s.getStartNode() == backTrack.from()){
 					path.add(s);
 					backTrack = backTrack.from();

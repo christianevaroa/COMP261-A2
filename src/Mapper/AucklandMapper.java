@@ -218,7 +218,8 @@ public class AucklandMapper{
 				else if (selectedNode != null){
 					destinationNode = findNode(e.getPoint());
 					selectedSegments = roadGraph.findPath(selectedNode, destinationNode, distance);
-					textOutput.setText(destinationNode.toString());
+					if(selectedSegments == null){ textOutput.setText("No path between these nodes."); return; }
+					textOutput.setText("Path from "+selectedNode.toString()+" to "+destinationNode.toString()+": ");
 					ArrayList<String> roadNames = new ArrayList<String>();
 					HashMap<String, Double> roadNamesLengths = new HashMap<String, Double>();
 					for(Segment s : selectedSegments){
