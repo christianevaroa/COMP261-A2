@@ -301,7 +301,6 @@ public class RoadGraph{
 									estTotal = estTotal-(estTotal*0.99);
 									break;
 								}
-								System.out.println("Estimate after multiplier: "+estTotal+", road class: "+s.getRoad().getRoadclass());
 							}
 							SearchNode newSearchNode = new SearchNode(neigh, node, costToNeigh, estTotal);
 							fringe.offer(newSearchNode);
