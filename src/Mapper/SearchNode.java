@@ -1,5 +1,12 @@
 package Mapper;
 
+/* Code for COMP261 Assignment
+ * Name:		Christian Evaroa
+ * Usercode:	evaroachri
+ * ID:			300276046
+
+ */
+
 public class SearchNode implements Comparable {
 	private Node node;
 	private Node from;

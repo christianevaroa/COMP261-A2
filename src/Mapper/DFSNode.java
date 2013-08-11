@@ -1,5 +1,12 @@
 package Mapper;
 
+/* Code for COMP261 Assignment
+ * Name:		Christian Evaroa
+ * Usercode:	evaroachri
+ * ID:			300276046
+
+ */
+
 import java.util.ArrayDeque;
 
 public class DFSNode {

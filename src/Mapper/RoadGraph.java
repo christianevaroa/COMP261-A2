@@ -1,9 +1,9 @@
 package Mapper;
 
 /* Code for COMP261 Assignment
- * Name:
- * Usercode:
- * ID:
+ * Name:		Christian Evaroa
+ * Usercode:	evaroachri
+ * ID:			300276046
 
  */
 
