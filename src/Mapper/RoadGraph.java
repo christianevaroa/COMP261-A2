@@ -279,7 +279,6 @@ public class RoadGraph{
 						if(!neigh.visited()){
 							double costToNeigh = currentNode.costToHere() + s.getLength();
 							double estTotal = costToNeigh + neigh.distanceTo(goalLoc);
-							System.out.println("Estimate: "+estTotal);
 							if(!distance){
 								switch(s.getRoad().getSpeed()){
 								case(0):
