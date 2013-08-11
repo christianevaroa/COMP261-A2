@@ -34,6 +34,7 @@ public class AucklandMapper{
 	private Set<Node> articulationPoints;
 
 	private boolean loaded = false;
+	private boolean distance;
 
 	// Dimensions for drawing
 	double westBoundary ;
@@ -70,7 +71,6 @@ public class AucklandMapper{
 		if (fc.showOpenDialog(frame)!=JFileChooser.APPROVE_OPTION){return null;}
 		return fc.getSelectedFile().getPath()+File.separator;
 	}
-
 
 	private void setupScaling(){
 		double[] b = roadGraph.getBoundaries();
@@ -148,6 +148,18 @@ public class AucklandMapper{
 		panel.add(button);
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){pan("down");}});
+		
+		button = new JButton("Dist / Speed");
+		panel.add(button);
+		button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev){
+				distance = !distance;
+				if(distance){
+					textOutput.setText("Now finding shortest path");
+				} else {
+					textOutput.setText("Now finding fastest path");
+				}
+				}});
 
 		button = new JButton("Deselect");
 		panel.add(button);
@@ -169,7 +181,12 @@ public class AucklandMapper{
 						articulationPoints.addAll(roadGraph.iterDFS(n, 0, new DFSNode(selectedNode, 0, null)));
 						drawing.repaint();
 					}
-					//for(Node n :)
+					for(Node n : roadGraph.nodes().values()){
+						if(!n.visited()){
+							articulationPoints.addAll(roadGraph.iterDFS(n, 0, new DFSNode(n, 0, null)));
+						}
+					}
+					textOutput.setText("Found "+articulationPoints.size()+" articulation points.");
 				}
 				else{
 					textOutput.setText("You must select a node to find articulation points");
@@ -200,23 +217,27 @@ public class AucklandMapper{
 				}
 				else if (selectedNode != null){
 					destinationNode = findNode(e.getPoint());
-					selectedSegments = roadGraph.findPath(selectedNode, destinationNode);
+					selectedSegments = roadGraph.findPath(selectedNode, destinationNode, distance);
 					textOutput.setText(destinationNode.toString());
-					HashMap<String, Double> roadNames = new HashMap<String, Double>();
+					ArrayList<String> roadNames = new ArrayList<String>();
+					HashMap<String, Double> roadNamesLengths = new HashMap<String, Double>();
 					for(Segment s : selectedSegments){
 						String road = s.getRoad().getName();
 						double length = s.getLength();
-						if(!roadNames.containsKey(road)){
-							roadNames.put(road, length);
+						if(!roadNames.contains(road)){
+							roadNames.add(road);
+						}
+						if(!roadNamesLengths.containsKey(road)){
+							roadNamesLengths.put(road, length);
 						}
 						else{
-							roadNames.put(road, roadNames.get(road)+length);
+							roadNamesLengths.put(road, roadNamesLengths.get(road)+length);
 						}
 					}
 					double totalLength = 0;
-					for(String s : roadNames.keySet()){
-						totalLength += roadNames.get(s);
-						textOutput.append("\n"+s+": "+roadNames.get(s)+" km");
+					for(String s : roadNames){
+						totalLength += roadNamesLengths.get(s);
+						textOutput.append("\n"+s+": "+roadNamesLengths.get(s)+" km");
 					}
 					textOutput.append("\nTotal distance: "+totalLength+" km");
 				}

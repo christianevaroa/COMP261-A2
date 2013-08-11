@@ -254,7 +254,7 @@ public class RoadGraph{
 	 * @param goal		The finishing point.
 	 * @return List of Sections that makes up the shortest path from origin to goal.
 	 */
-	public List<Segment> findPath(Node origin, Node goal) {
+	public List<Segment> findPath(Node origin, Node goal, boolean distance) {
 		for(Node n : nodes.values()){
 			n.visit(false);
 		}
@@ -274,12 +274,38 @@ public class RoadGraph{
 					break;
 				}
 				for(Segment s : node.getOutNeighbours()){
-					Node neigh = s.getEndNode();
-					if(!neigh.visited()){
-						double costToNeigh = currentNode.costToHere() + s.getLength();
-						double estTotal = costToNeigh + neigh.distanceTo(goalLoc);
-						SearchNode newSearchNode = new SearchNode(neigh, node, costToNeigh, estTotal);
-						fringe.offer(newSearchNode);
+					if(!s.getRoad().isNotForCars()){
+						Node neigh = s.getEndNode();
+						if(!neigh.visited()){
+							double costToNeigh = currentNode.costToHere() + s.getLength();
+							double estTotal = costToNeigh + neigh.distanceTo(goalLoc);
+							System.out.println("Estimate: "+estTotal);
+							if(!distance){
+								switch(s.getRoad().getSpeed()){
+								case(0):
+									estTotal = estTotal-(estTotal*0.05);
+									break;
+								case(1):
+									estTotal = estTotal-(estTotal*0.20);
+									break;
+								case(2):
+									estTotal = estTotal-(estTotal*0.40);
+									break;
+								case(3):
+									estTotal = estTotal-(estTotal*0.60);
+									break;
+								case(4):
+									estTotal = estTotal-(estTotal*0.80);
+									break;
+								case(5):
+									estTotal = estTotal-(estTotal*0.99);
+									break;
+								}
+								System.out.println("Estimate after multiplier: "+estTotal+", road class: "+s.getRoad().getRoadclass());
+							}
+							SearchNode newSearchNode = new SearchNode(neigh, node, costToNeigh, estTotal);
+							fringe.offer(newSearchNode);
+						}
 					}
 				}
 			}
@@ -297,7 +323,7 @@ public class RoadGraph{
 		Collections.reverse(path);
 		return path;
 	}	
-	
+
 	public Set<Node> iterDFS(Node firstNode, double d, DFSNode root){
 		// initialise required collections
 		HashSet<Node> articulationPoints = new HashSet<Node>();
@@ -340,13 +366,12 @@ public class RoadGraph{
 				}
 				stack.pop();	
 			}
-			//for(Node n : nodes.values()){
-			//	if(!node.visited()){
-			//		articulationPoints.addAll(iterDFS(n, 0, new DFSNode(n, 0, null)));
-			//	}
-			//}
 		}
 		return articulationPoints;
+	}
+
+	public Map<Integer, Node> nodes(){
+		return this.nodes;
 	}
 
 }
