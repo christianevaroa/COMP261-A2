@@ -34,7 +34,7 @@ public class AucklandMapper{
 	private Set<Node> articulationPoints;
 
 	private boolean loaded = false;
-	private boolean distance;
+	private boolean distance = true;
 
 	// Dimensions for drawing
 	double westBoundary ;
@@ -176,6 +176,7 @@ public class AucklandMapper{
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){
 				if(selectedNode != null){
+					textOutput.setText("Finding articulation points...");
 					for(Node n: selectedNode.getNeighNodes()){
 						articulationPoints = new HashSet<Node>();
 						articulationPoints.addAll(roadGraph.iterDFS(n, 0, new DFSNode(selectedNode, 0, null)));
@@ -221,24 +222,29 @@ public class AucklandMapper{
 					if(selectedSegments == null){ textOutput.setText("No path between these nodes."); return; }
 					textOutput.setText("Path from "+selectedNode.toString()+" to "+destinationNode.toString()+": ");
 					ArrayList<String> roadNames = new ArrayList<String>();
-					HashMap<String, Double> roadNamesLengths = new HashMap<String, Double>();
+					HashMap<Integer, Double> roadNamesLengths = new HashMap<Integer, Double>();
+					int i = 0;
 					for(Segment s : selectedSegments){
 						String road = s.getRoad().getName();
 						double length = s.getLength();
-						if(!roadNames.contains(road)){
+						if(i >= roadNames.size()){
 							roadNames.add(road);
 						}
-						if(!roadNamesLengths.containsKey(road)){
-							roadNamesLengths.put(road, length);
+						if(!roadNames.get(i).equals(road)){
+							roadNames.add(road);
+							i++;
+						}
+						if(!roadNamesLengths.containsKey(i)){
+							roadNamesLengths.put(i, length);
 						}
 						else{
-							roadNamesLengths.put(road, roadNamesLengths.get(road)+length);
+							roadNamesLengths.put(i, roadNamesLengths.get(i)+length);
 						}
 					}
 					double totalLength = 0;
-					for(String s : roadNames){
-						totalLength += roadNamesLengths.get(s);
-						textOutput.append("\n"+s+": "+roadNamesLengths.get(s)+" km");
+					for(i = 0; i < roadNames.size(); i++){
+						totalLength += roadNamesLengths.get(i);
+						textOutput.append("\n"+roadNames.get(i)+": "+roadNamesLengths.get(i)+" km");
 					}
 					textOutput.append("\nTotal distance: "+totalLength+" km");
 				}
