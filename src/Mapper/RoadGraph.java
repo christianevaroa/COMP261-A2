@@ -257,13 +257,13 @@ public class RoadGraph{
 	public List<Segment> findPath(Node origin, Node goal, boolean distance) {
 		for(Node n : nodes.values()){
 			n.visit(false);
+			n.setFrom(null);
 		}
 		List<Segment> path = new ArrayList<Segment>();
 		PriorityQueue<SearchNode> fringe = new PriorityQueue<SearchNode>();
 		Location goalLoc = goal.getLoc();
 		SearchNode start = new SearchNode(origin, null, 0, origin.distanceTo(goalLoc));
 		fringe.offer(start);
-		int i = 0;
 		while(!fringe.isEmpty()){
 			SearchNode currentNode = fringe.poll();
 			Node node = currentNode.node();
@@ -376,5 +376,4 @@ public class RoadGraph{
 	public Map<Integer, Node> nodes(){
 		return this.nodes;
 	}
-
 }
